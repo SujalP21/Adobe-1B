@@ -1,0 +1,31 @@
+# Docker Compose for Adobe Challenge 1B
+version: '3.8'
+
+services:
+  adobe-challenge-1b:
+    build: .
+    container_name: adobe-challenge-1b
+    volumes:
+      # Mount current directory as input (contains Collections)
+      - .:/app/input:ro
+      # Mount output directory
+      - ./output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    
+  # Optional: Development service with interactive mode
+  adobe-challenge-1b-dev:
+    build: .
+    container_name: adobe-challenge-1b-dev
+    volumes:
+      - .:/app/input
+      - ./output:/app/output
+      # Mount source code for development
+      - ./main.py:/app/main.py
+    environment:
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    profiles: ["dev"]
